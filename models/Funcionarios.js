@@ -21,10 +21,6 @@ const FuncionariosSchema = new Schema({
         required: true
     },
 
-    especialidade: {
-        type: String
-    },
-
     email: {
         type: String,
         required: true
