@@ -18,6 +18,13 @@ const FuncionariosSchema = new Schema({
 
     cargo: {
         type: String,
+        enum: ['adm', 'dentista', 'assistente'],
+        required: true
+    },
+
+    status: {
+        type: String,
+        enum: ['ativo', 'inativo'],
         required: true
     },
 

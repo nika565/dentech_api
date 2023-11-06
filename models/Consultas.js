@@ -29,6 +29,12 @@ const ConsultasSchema = new Schema({
         required: true
     },
 
+    status: {
+        type: String,
+        enum: ['disponivel', 'agendado', 'realizado', 'cancelado'],
+        required: true
+    }
+
 });
 
 const ConsultasModel = mongoose.model('Consultas', ConsultasSchema);
