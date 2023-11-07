@@ -25,7 +25,7 @@ class ValidarEmail {
         return false; // Retorna false se o e-mail não contiver o domínio "@dentech.com"
     }
 
-    async emailDupliacdo(email) {
+    async emailDuplicado(email) {
         try {
 
             const duplicadoCliente = await ClientesModel.findOne({email: email});

@@ -14,12 +14,7 @@ const ConsultasSchema = new Schema({
         required: true
     },
 
-    idCliente: {
-        type: String,
-        required: true
-    },
-
-    idServico:{
+    horario:{
         type: String,
         required: true
     },
@@ -31,8 +26,16 @@ const ConsultasSchema = new Schema({
 
     status: {
         type: String,
-        enum: ['disponivel', 'agendado', 'realizado', 'cancelado'],
+        enum: ['disponivel', 'agendado', 'finalizado', 'cancelado'],
         required: true
+    },
+
+    idCliente: {
+        type: String,
+    },
+
+    idServico:{
+        type: String,
     }
 
 });
