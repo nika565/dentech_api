@@ -203,7 +203,7 @@ class ConsultaController {
             const id = req.params.id;
 
             const dados = {
-                status: `agendado`
+                status: `cancelado`
             };
 
             const agendamento = await ConsultasModel.findByIdAndUpdate(id, dados);

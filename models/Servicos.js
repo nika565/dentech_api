@@ -13,6 +13,11 @@ const ServicosSchema = new Schema({
     descricao: {
         type: String,
         required: true
+    },
+
+    preco: {
+        type: Number,
+        required: true
     }
 
 });

@@ -1,5 +1,6 @@
 // Model para realizar operações no banco de dados
 const FuncionariosModel = require('../models/Funcionarios');
+require('dotenv').config();
 
 // Importando as validações
 const Validacoes = require('../rules/Validacoes');
@@ -105,6 +106,28 @@ class FuncionariosController {
     async editar(req, res) {
         try {
 
+            // Id do usuário para realizar a edição
+            const id = req.params.id;
+
+            if(req.body.cargo) {
+
+                const obj = {
+                    cargo: req.body.cargo
+                };
+
+                const alteracao = await FuncionariosModel.findByIdAndUpdate(id, obj);
+
+                if (alteracao) {
+                    return res.status(400).json({status: `success`, msg: `Operação realizada com sucesso`});
+                }
+
+                return res.status(400).json({status: `error`, msg: `Não foi possível realizar esta operação`});
+
+            } else {
+                return res.status(400).json({msg: `Não foi possível alterar o cargo.`, status: `error`});
+            }
+
+
         } catch (error) {
             console.log(error);
             return res.status(500).json({ status: 'error', msg: 'Problemas no servidor.' });
@@ -114,6 +137,16 @@ class FuncionariosController {
     async inativar(req, res) {
         try {
 
+            const id = req.params.id;
+
+            const demitir = await FuncionariosModel.findByIdAndUpdate(id, {status: `inativo`});
+
+            if (demitir) {
+                return res.status(200).json({msg: `Usuário inativado com sucesso.`, status: `success`});
+            }
+
+            return res.status(400).json({msg: `Não foi possível realizar esta operação.`, status: `error`});
+
         } catch (error) {
             console.log(error);
             return res.status(500).json({ status: 'error', msg: 'Problemas no servidor.' });
@@ -122,6 +155,16 @@ class FuncionariosController {
 
     async resetarSenha(req, res) {
         try {
+
+            const id = req.params.id;
+
+            const reset = await FuncionariosModel.findByIdAndUpdate(id, {senha: process.env.SENHAPADRAO});
+
+            if (reset) {
+                return res.status(200).json({status: `error`, msg: `Senha redefinida com sucesso.`});
+            }
+
+            return res.status(400).json({status: `error`, msg: `Não foi possível redefinir a senha.`});
 
         } catch (error) {
             console.log(error);
