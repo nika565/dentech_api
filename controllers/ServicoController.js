@@ -9,6 +9,9 @@ class ServicoController {
     async cadastrar(req, res) {
         try {
 
+            // Verificando o cargo da pessoa que está criando o horario de agendamento
+            if (req.cargo !== 'adm') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
+
             // Array para verificar os campos vazios.
             const array = [
                 req.body.nomeServico,
@@ -74,6 +77,9 @@ class ServicoController {
     async editar(req, res) {
         try {
 
+            // Verificando o cargo da pessoa que está criando o horario de agendamento
+            if (req.cargo !== 'adm') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
+
             const id = req.params.id;
 
             const servico = {
@@ -84,9 +90,9 @@ class ServicoController {
 
             const edicao = await ServicoModel.findByIdAndUpdate(id, servico);
 
-            if (edicao) return res.status(200).json({status: `success`, msg: `Serviço alterado com sucesso.`});
+            if (edicao) return res.status(200).json({ status: `success`, msg: `Serviço alterado com sucesso.` });
 
-            return res.status(200).json({status: `success`, msg: `Serviço alterado com sucesso.`});
+            return res.status(200).json({ status: `success`, msg: `Serviço alterado com sucesso.` });
 
         } catch (error) {
             console.log(error);
@@ -97,13 +103,16 @@ class ServicoController {
     async apagar(req, res) {
         try {
 
+            // Verificando o cargo da pessoa que está criando o horario de agendamento
+            if (req.cargo !== 'adm') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
+
             const id = req.params.id;
 
             const deletar = await ServicoModel.findByIdAndDelete(id);
 
-            if (deletar) return res.status(200).json({status: `success`, msg: `Serviço excluido com sucesso.`});
+            if (deletar) return res.status(200).json({ status: `success`, msg: `Serviço excluido com sucesso.` });
 
-            return res.status(404).json({status: `error`, msg: `Não foi possível excluir o serviço`});
+            return res.status(404).json({ status: `error`, msg: `Não foi possível excluir o serviço` });
 
         } catch (error) {
             console.log(error);

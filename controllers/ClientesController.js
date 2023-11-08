@@ -139,7 +139,7 @@ class ClientesController {
 
     }
 
-    async recuperarSenha(req, res) {
+    async alterarSenha(req, res) {
 
         try {
 

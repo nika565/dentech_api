@@ -17,6 +17,9 @@ class FuncionariosController {
     async cadastrar(req, res) {
         try {
 
+            // Verificando o cargo da pessoa que está criando o horario de agendamento
+            if (req.cargo !== 'adm') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
+
             // Array para validar campos vazio
             const array = [
                 req.body.nome,
@@ -75,16 +78,20 @@ class FuncionariosController {
     }
 
     async buscar(req, res) {
+
+        // Verificando o cargo da pessoa que está criando o horario de agendamento
+        if (req.cargo !== 'adm' || req.cargo !== 'dentista' || req.cargo !== 'assistente') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
+
         try {
 
             const id = req.query.id
             const nome = req.query.nome
 
-            if(id) {
-                
+            if (id) {
+
                 const dados = await FuncionariosModel.findById(id);
 
-                if(dados) return res.status(200).json({msg: `OK`, status: `success`, dados: dados});
+                if (dados) return res.status(200).json({ msg: `OK`, status: `success`, dados: dados });
 
             }
 
@@ -92,10 +99,10 @@ class FuncionariosController {
 
                 const dados = await FuncionariosModel.find({ nome: { $regex: new RegExp(nome, 'i') } });
 
-                if(dados.length > 0) return res.status(200).json({msg: `OK`, status: `success`, dados: dados});
+                if (dados.length > 0) return res.status(200).json({ msg: `OK`, status: `success`, dados: dados });
             }
 
-            return res.status(404).json({status: `error`, msg: `Nenhum funcionário encontrado.`});
+            return res.status(404).json({ status: `error`, msg: `Nenhum funcionário encontrado.` });
 
         } catch (error) {
             console.log(error);
@@ -104,12 +111,16 @@ class FuncionariosController {
     }
 
     async editar(req, res) {
+
+        // Verificando o cargo da pessoa que está criando o horario de agendamento
+        if (req.cargo !== 'adm') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
+
         try {
 
             // Id do usuário para realizar a edição
             const id = req.params.id;
 
-            if(req.body.cargo) {
+            if (req.body.cargo) {
 
                 const obj = {
                     cargo: req.body.cargo
@@ -118,13 +129,13 @@ class FuncionariosController {
                 const alteracao = await FuncionariosModel.findByIdAndUpdate(id, obj);
 
                 if (alteracao) {
-                    return res.status(400).json({status: `success`, msg: `Operação realizada com sucesso`});
+                    return res.status(400).json({ status: `success`, msg: `Operação realizada com sucesso` });
                 }
 
-                return res.status(400).json({status: `error`, msg: `Não foi possível realizar esta operação`});
+                return res.status(400).json({ status: `error`, msg: `Não foi possível realizar esta operação` });
 
             } else {
-                return res.status(400).json({msg: `Não foi possível alterar o cargo.`, status: `error`});
+                return res.status(400).json({ msg: `Não foi possível alterar o cargo.`, status: `error` });
             }
 
 
@@ -135,17 +146,21 @@ class FuncionariosController {
     }
 
     async inativar(req, res) {
+
         try {
+
+            // Verificando o cargo da pessoa que está criando o horario de agendamento
+            if (req.cargo !== 'adm') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
 
             const id = req.params.id;
 
-            const demitir = await FuncionariosModel.findByIdAndUpdate(id, {status: `inativo`});
+            const demitir = await FuncionariosModel.findByIdAndDelete(id);
 
             if (demitir) {
-                return res.status(200).json({msg: `Usuário inativado com sucesso.`, status: `success`});
+                return res.status(200).json({ msg: `Usuário demitido com sucesso.`, status: `success` });
             }
 
-            return res.status(400).json({msg: `Não foi possível realizar esta operação.`, status: `error`});
+            return res.status(400).json({ msg: `Não foi possível realizar esta operação.`, status: `error` });
 
         } catch (error) {
             console.log(error);
@@ -156,15 +171,18 @@ class FuncionariosController {
     async resetarSenha(req, res) {
         try {
 
+            // Verificando o cargo da pessoa que está criando o horario de agendamento
+            if (req.cargo !== 'adm') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
+
             const id = req.params.id;
 
-            const reset = await FuncionariosModel.findByIdAndUpdate(id, {senha: process.env.SENHAPADRAO});
+            const reset = await FuncionariosModel.findByIdAndUpdate(id, { senha: process.env.SENHAPADRAO });
 
             if (reset) {
-                return res.status(200).json({status: `error`, msg: `Senha redefinida com sucesso.`});
+                return res.status(200).json({ status: `error`, msg: `Senha redefinida com sucesso.` });
             }
 
-            return res.status(400).json({status: `error`, msg: `Não foi possível redefinir a senha.`});
+            return res.status(400).json({ status: `error`, msg: `Não foi possível redefinir a senha.` });
 
         } catch (error) {
             console.log(error);

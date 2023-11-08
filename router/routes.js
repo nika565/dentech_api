@@ -2,9 +2,19 @@
 const roteador = require('express').Router();
 
 // Importando roteadores específicos
-const roteadorTeste = require('./teste');
+const roteadorClientes = require('./clientes');
+const roteadorFuncionarios = require('./funcionarios');
+const roteadorConsultas = require('./consultas');
+const roteadorServicos = require('./servicos');
+const roteadorRelatorio = require('./relatorio');
+const roteadorLogin = require('./login');
 
 // Usando os roteadores
-roteador.use(roteadorTeste);
+roteador.use('/', roteadorClientes);
+roteador.use('/', roteadorFuncionarios);
+roteador.use('/', roteadorLogin);
+roteador.use('/', roteadorConsultas);
+roteador.use('/', roteadorServicos);
+roteador.use('/consultas', roteadorRelatorio);
 
 module.exports = roteador;
