@@ -30,7 +30,9 @@ async function login(req, res) {
 
             if (consultar) {
 
-                if (ValidadorSenha.verificar(senha, consultar.senha)) {
+                if (consultar.senha === process.env.SENHAPADRAO) return res.status(200).json({status: `success`, msg: `Altere sua senha`})
+
+                if (await ValidadorSenha.verificar(senha, consultar.senha)) {
 
                     // Gerar o token
                     try {
@@ -71,9 +73,11 @@ async function login(req, res) {
 
             const consultar = await ClientesModel.findOne({ email: email });
 
+            console.log(consultar);
+
             if (consultar) {
 
-                if (ValidadorSenha.verificar(senha, consultar.senha)) {
+                if (await ValidadorSenha.verificar(senha, consultar.senha)) {
 
                     // Gerar o token
                     try {
@@ -88,6 +92,7 @@ async function login(req, res) {
 
                         // Dados a serem enviados para o cliente
                         const dados = {
+                            id: consultar._id,
                             nome: consultar.nome,
                             sobrenome: consultar.sobrenome,
                             email: consultar.email,

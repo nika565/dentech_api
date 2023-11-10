@@ -86,17 +86,17 @@ class ClientesController {
             // verificando se o id veio pelo parâmetro de consulta.
             if (!validador.camposVazios([id])) {
 
-                const dados = await ClientesModel.findById(id);
+                const dados = await ClientesModel.findById(id, '-senha');
 
-                if (dados) return res.status(200).json({status: 'success', msg: 'OK.', dados: dados});
+                if (dados) return res.status(200).json({ status: 'success', msg: 'OK.', dados: dados });
 
-                return res.status(404).json({status: 'error', msg: `Nenhum usuário encontrado.`});
+                return res.status(404).json({ status: 'error', msg: `Nenhum usuário encontrado.` });
 
             } else {
 
                 const consulta = await ClientesModel.countDocuments();
 
-                return res.status(200).json({ status: `success`, msg: `OK.`, dados: { consulta } });
+                return res.status(200).json({ status: `success`, msg: `OK.`, dados: consulta });
 
             }
 
@@ -115,9 +115,9 @@ class ClientesController {
 
             const apagar = await ClientesModel.findByIdAndDelete(id);
 
-            if (apagar) return res.status(200).json({status: `success`, msg: `Usuário deletado com sucesso!`});
+            if (apagar) return res.status(200).json({ status: `success`, msg: `Usuário deletado com sucesso!` });
 
-            return res.status(404).json({msg: `Não foi possível excluir o usuário do sistema.`, status: `error`});
+            return res.status(404).json({ msg: `Não foi possível excluir o usuário do sistema.`, status: `error` });
 
         } catch (error) {
             console.log(error);
@@ -130,7 +130,7 @@ class ClientesController {
 
         try {
 
-            return res.status(200).json({status: `success`, msg: `Ainda em desenvolvimento...`});
+            return res.status(200).json({ status: `success`, msg: `Ainda em desenvolvimento...` });
 
         } catch (error) {
             console.log(error);
@@ -145,13 +145,19 @@ class ClientesController {
 
             const id = req.params.id;
 
-            const senha = await validadorSenha.criptografar(req.body.senha)
+            if (validadorSenha.tamanhoIncorreto(req.body.senha)) return res.status(400).json({ status: `error`, msg: `A senha dev ter entre 6 e 12 caracteres.` });
 
-            const alteracao = await ClientesModel.findByIdAndUpdate(id, {senha: senha});
+            if (validadorSenha.formatoIncorreto(req.body.senha)) return res.status(400).json({ status: `error`, msg: `A senha deve possuir no mínimo uma letra maiúscula, uma letra minúscula e um número.` });
 
-            if (alteracao) return res.status(200).json({status: `success`, msg: `Senha alterada com sucesso.`});
+            const senha = await validadorSenha.criptografar(req.body.senha);
 
-            return res.status(400).json({status: `error`, msg: `Não foi possível alterar a senha.`})
+            const alteracao = await ClientesModel.findByIdAndUpdate(id, { senha: senha });
+
+            console.log(alteracao);
+
+            if (alteracao) return res.status(200).json({ status: `success`, msg: `Senha alterada com sucesso.` });
+
+            return res.status(400).json({ status: `error`, msg: `Não foi possível alterar a senha.` })
         } catch (error) {
             console.log(error);
             return res.status(500).json({ status: `error`, msg: `Problemas no servidor.` });

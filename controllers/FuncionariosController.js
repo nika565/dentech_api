@@ -26,7 +26,6 @@ class FuncionariosController {
                 req.body.sobrenome,
                 req.body.cargo,
                 req.body.email,
-                req.body.senha,
             ]
 
             // Validações de cadastro
@@ -48,6 +47,8 @@ class FuncionariosController {
                 nome: req.body.nome,
                 sobrenome: req.body.sobrenome,
                 email: req.body.email,
+                cargo: req.body.cargo,
+                status: 'ativo',
                 senha: process.env.SENHAPADRAO
             };
 
@@ -68,7 +69,7 @@ class FuncionariosController {
     async buscar(req, res) {
 
         // Verificando o cargo da pessoa que está criando o horario de agendamento
-        if (req.cargo !== 'adm' || req.cargo !== 'dentista' || req.cargo !== 'assistente') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
+        if (req.cargo !== 'adm' && req.cargo !== 'dentista' && req.cargo !== 'assistente') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
 
         try {
 
@@ -88,6 +89,10 @@ class FuncionariosController {
 
                 if (dados.length > 0) return res.status(200).json({ msg: `OK`, status: `success`, dados: dados });
             }
+
+            const dados = await FuncionariosModel.find();
+
+            if (dados.length > 0) return res.status(200).json({ msg: `OK`, status: `success`, dados: dados });
 
             return res.status(404).json({ status: `error`, msg: `Nenhum funcionário encontrado.` });
 
@@ -112,6 +117,8 @@ class FuncionariosController {
                 const obj = {
                     cargo: req.body.cargo
                 };
+
+                if (obj.cargo !== 'adm' && obj.cargo !== 'dentista' && obj.cargo !== 'assistente') return res.status(400).json({status: `error`, msg: `Cargo inválido.`});
 
                 const alteracao = await FuncionariosModel.findByIdAndUpdate(id, obj);
 
@@ -180,13 +187,13 @@ class FuncionariosController {
     async alterarSenha(req, res) {
         try {
 
-            if (req.cargo !== 'adm' || req.cargo !== 'dentista' || req.cargo !== 'assistente') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
+            if (req.cargo !== 'adm' && req.cargo !== 'dentista' && req.cargo !== 'assistente') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
 
             const id = req.params.id;
 
             if (validadorSenha.tamanhoIncorreto(req.body.senha)) return res.status(400).json({ status: `error`, msg: `A senha dev ter entre 6 e 12 caracteres.` });
 
-            if (validadorSenha.formatoIncorreto(req.body.senha)) return res.status(400).json({ status: `error`, msg: `A senha deve possuir no mínimo uma letra maiúscula, uma letra minúscula e um número.` })
+            if (validadorSenha.formatoIncorreto(req.body.senha)) return res.status(400).json({ status: `error`, msg: `A senha deve possuir no mínimo uma letra maiúscula, uma letra minúscula e um número.` });
 
             const senha = await validadorSenha.criptografar(req.body.senha)
 

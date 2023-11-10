@@ -11,8 +11,8 @@ const Funcionarios = new FuncionariosController();
 
 roteadorFuncionarios.route('/funcionarios').get(autenticacao, Funcionarios.buscar);
 roteadorFuncionarios.route('/funcionarios').post(autenticacao, Funcionarios.cadastrar);
-roteadorFuncionarios.route('/funcionarios').patch(autenticacao, Funcionarios.resetarSenha);
-roteadorFuncionarios.route('/funcionarios').put(autenticacao, Funcionarios.editar);
-roteadorFuncionarios.route('/funcionarios').delete(autenticacao, Funcionarios.inativar);
+roteadorFuncionarios.route('/funcionarios/:id').patch(autenticacao, Funcionarios.resetarSenha);
+roteadorFuncionarios.route('/funcionarios/:id').put(autenticacao, Funcionarios.editar);
+roteadorFuncionarios.route('/funcionarios/:id').delete(autenticacao, Funcionarios.inativar);
 
 module.exports = roteadorFuncionarios;

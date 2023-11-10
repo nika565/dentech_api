@@ -12,7 +12,7 @@ class ConsultasController {
         try {
 
             // Verificando o cargo da pessoa que está criando o horario de agendamento
-            if (req.cargo !== 'adm' || req.cargo !== 'dentista' || req.cargo !== 'assistente' ) return res.status(403).json({status: `error`, msg: `Você não tem autorização para acessar esse recurso.`});
+            if (req.cargo !== 'adm' && req.cargo !== 'dentista' && req.cargo !== 'assistente' ) return res.status(403).json({status: `error`, msg: `Você não tem autorização para acessar esse recurso.`});
 
             // Array para verificar se os dados estão vazios
             const arr = [
@@ -28,7 +28,7 @@ class ConsultasController {
 
             const dadosAgendamento = {
                 data: req.body.data,
-                horaraio: req.body.horario,
+                horario: req.body.horario,
                 idDentista: req.body.idDentista,
                 status: 'disponivel',
             };
@@ -93,9 +93,17 @@ class ConsultasController {
             // Id do agendamento para fazer a alteração
             const { id, status } = req.params;
 
+            if (status !== 'agendado' && status !== 'finalizado' && status !== 'cancelado') return res.status(400).json({status: `error`, msg: `Status incorreto.`})
+
             if (validador.camposVazios([req.body.idCliente])) return res.status(400).json({ msg: `É necessário o id do cliente`, status: `error` });
 
-            if (validador.camposVazios([req.body.idServico])) return res.status(400).json({ msg: `É necessário o id do cliente`, status: `error` });
+            if (validador.camposVazios([req.body.idServico])) return res.status(400).json({ msg: `É necessário o id do servico`, status: `error` });
+
+            const dados = {
+                status: status,
+                idCliente: req.body.idCliente,
+                idServico: req.body.idServico
+            }
 
             const agendamento = await ConsultasModel.findByIdAndUpdate(id, dados);
 

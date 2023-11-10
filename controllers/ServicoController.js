@@ -79,14 +79,23 @@ class ServicoController {
 
             // Verificando o cargo da pessoa que está criando o horario de agendamento
             if (req.cargo !== 'adm') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
-
+            
             const id = req.params.id;
+            
+            const servico = {};
 
-            const servico = {
-                nomeServico: req.body.nomeServico,
-                descricao: req.body.descricao,
-                preco: req.body.preco
-            };
+            if (req.body.nomeServico) {
+                servico.nomeServico = req.body.nomeServico
+            }
+
+            if (req.body.descricao) {
+                servico.descricao = req.body.descricao
+            }
+
+            if (req.body.preco) {
+                servico.preco = req.body.preco
+            }
+
 
             const edicao = await ServicoModel.findByIdAndUpdate(id, servico);
 

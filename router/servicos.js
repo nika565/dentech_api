@@ -7,7 +7,7 @@ const Servico = new ServicoController();
 
 roteadorServicos.route('/servicos').get(autenticacao, Servico.buscar);
 roteadorServicos.route('/servicos').post(autenticacao, Servico.cadastrar);
-roteadorServicos.route('/servicos').put(autenticacao, Servico.editar);
-roteadorServicos.route('/servicos').delete(autenticacao, Servico.apagar);
+roteadorServicos.route('/servicos/:id').put(autenticacao, Servico.editar);
+roteadorServicos.route('/servicos/:id').delete(autenticacao, Servico.apagar);
 
 module.exports = roteadorServicos;

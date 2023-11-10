@@ -11,8 +11,8 @@ const Clientes = new ClientesController();
 
 roteadorClientes.route('/clientes').get(autenticacao, Clientes.buscar);
 roteadorClientes.route('/clientes').post(Clientes.cadastrar);
-roteadorClientes.route('/clientes').patch(Clientes.enviarEmail);
-roteadorClientes.route('/clientes').put(Clientes.alterarSenha);
-roteadorClientes.route('/clientes').delete(autenticacao, Clientes.apagar);
+roteadorClientes.route('/clientes/:id').patch(Clientes.enviarEmail);
+roteadorClientes.route('/clientes/:id').put(Clientes.alterarSenha);
+roteadorClientes.route('/clientes/:id').delete(autenticacao, Clientes.apagar);
 
 module.exports = roteadorClientes;
