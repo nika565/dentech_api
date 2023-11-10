@@ -44,23 +44,11 @@ class FuncionariosController {
 
             if (!validadorEmail.verificarDominio(req.body.email)) return res.status(400).json({ status: `error`, msg: `O e-mail foi inserido de forma incorreta. É necessário o e-mail possuir "@dentech.com".` });
 
-
-            // Validações referentes a senha
-            if (validadorSenha.tamanhoIncorreto(req.body.senha)) return res.status(400).json({ status: `error`, msg: `A senha deve ter entre 6 e 12 caracteres.` });
-
-            if (validadorSenha.formatoIncorreto(req.body.senha)) return res.status(400).json({ status: `error`, msg: `A senha deve possuir no mínimo uma letra maiúscula, uma letra minúscula e um número.` });
-
-
-            // Criptografando a senha
-            const senha = await validadorSenha.criptografar(req.body.senha);
-
-            if (senha === false) return res.status(500).json({ status: `error`, msg: `Ocorreu um erro ao cadastrar, tente novamente mais tarde.` });
-
             const funcionario = {
                 nome: req.body.nome,
                 sobrenome: req.body.sobrenome,
                 email: req.body.email,
-                senha: senha
+                senha: process.env.SENHAPADRAO
             };
 
             const cadastro = await FuncionariosModel.create(funcionario);
@@ -84,8 +72,7 @@ class FuncionariosController {
 
         try {
 
-            const id = req.query.id
-            const nome = req.query.nome
+            const { id, nome } = req.query
 
             if (id) {
 
@@ -187,6 +174,30 @@ class FuncionariosController {
         } catch (error) {
             console.log(error);
             return res.status(500).json({ status: 'error', msg: 'Problemas no servidor.' });
+        }
+    }
+
+    async alterarSenha(req, res) {
+        try {
+
+            if (req.cargo !== 'adm' || req.cargo !== 'dentista' || req.cargo !== 'assistente') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
+
+            const id = req.params.id;
+
+            if (validadorSenha.tamanhoIncorreto(req.body.senha)) return res.status(400).json({ status: `error`, msg: `A senha dev ter entre 6 e 12 caracteres.` });
+
+            if (validadorSenha.formatoIncorreto(req.body.senha)) return res.status(400).json({ status: `error`, msg: `A senha deve possuir no mínimo uma letra maiúscula, uma letra minúscula e um número.` })
+
+            const senha = await validadorSenha.criptografar(req.body.senha)
+
+            const alteracao = await FuncionariosModel.findByIdAndUpdate(id, { senha: senha });
+
+            if (alteracao) return res.status(200).json({ status: `success`, msg: `Senha alterada com sucesso.` });
+
+            return res.status(400).json({ status: `error`, msg: `Não foi possível alterar a senha.` })
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ status: `error`, msg: `Problemas no servidor.` });
         }
     }
 

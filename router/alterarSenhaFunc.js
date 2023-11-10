@@ -1,0 +1,9 @@
+const roteadorSenha = require('express').Router();
+const autenticacao = require('../middlewares/autenticacao');
+
+const FuncionariosController = require('../controllers/FuncionariosController');
+const Funcionarios = new FuncionariosController();
+
+roteadorSenha.route('/alterarsenha').patch(autenticacao, Funcionarios.alterarSenha);
+
+module.exports = roteadorSenha;

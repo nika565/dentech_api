@@ -143,8 +143,15 @@ class ClientesController {
 
         try {
 
-            return res.status(200).json({status: `success`, msg: `Ainda em desenvolvimento...`});
+            const id = req.params.id;
 
+            const senha = await validadorSenha.criptografar(req.body.senha)
+
+            const alteracao = await ClientesModel.findByIdAndUpdate(id, {senha: senha});
+
+            if (alteracao) return res.status(200).json({status: `success`, msg: `Senha alterada com sucesso.`});
+
+            return res.status(400).json({status: `error`, msg: `Não foi possível alterar a senha.`})
         } catch (error) {
             console.log(error);
             return res.status(500).json({ status: `error`, msg: `Problemas no servidor.` });

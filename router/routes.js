@@ -8,6 +8,7 @@ const roteadorConsultas = require('./consultas');
 const roteadorServicos = require('./servicos');
 const roteadorRelatorio = require('./relatorio');
 const roteadorLogin = require('./login');
+const roteadorSenha = require('./alterarSenhaFunc');
 
 // Usando os roteadores
 roteador.use('/', roteadorClientes);
@@ -16,5 +17,6 @@ roteador.use('/', roteadorLogin);
 roteador.use('/', roteadorConsultas);
 roteador.use('/', roteadorServicos);
 roteador.use('/consultas', roteadorRelatorio);
+roteador.use('/funcionarios', roteadorSenha);
 
 module.exports = roteador;
