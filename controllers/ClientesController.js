@@ -178,9 +178,9 @@ class ClientesController {
             }
 
 
-            if (fs.existsSync(buscar.fotoPerfil)) {
-                fs.unlinkSync(buscar.fotoPerfil);
-            }
+            // if (fs.existsSync(buscar.fotoPerfil)) {
+            //     fs.unlinkSync(buscar.fotoPerfil);
+            // }
 
 
             const foto = await ClientesModel.findByIdAndUpdate(id, { fotoPerfil: arquivo.path });
