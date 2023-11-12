@@ -177,11 +177,11 @@ class ClientesController {
                 return res.status(404).json({ status: 'error', msg: 'Cliente não encontrado.' });
             }
 
-
-            // if (fs.existsSync(buscar.fotoPerfil)) {
-            //     fs.unlinkSync(buscar.fotoPerfil);
-            // }
-
+            if (buscar.fotoPerfil !== '') {
+                if (fs.existsSync(buscar.fotoPerfil)) {
+                    fs.unlinkSync(buscar.fotoPerfil);
+                }
+            }
 
             const foto = await ClientesModel.findByIdAndUpdate(id, { fotoPerfil: arquivo.path });
 
