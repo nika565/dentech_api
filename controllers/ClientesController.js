@@ -171,6 +171,7 @@ class ClientesController {
         const arquivo = req.file;
 
         try {
+            console.log(arquivo)
             const buscar = await ClientesModel.findById(id);
 
             if (!buscar) {
@@ -182,6 +183,7 @@ class ClientesController {
                     fs.unlinkSync(buscar.fotoPerfil);
                 }
             }
+
 
             const foto = await ClientesModel.findByIdAndUpdate(id, { fotoPerfil: arquivo.path });
 
