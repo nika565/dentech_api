@@ -166,69 +166,6 @@ class ClientesController {
 
     }
 
-    async postarFoto(req, res) {
-        const id = req.params.id;
-        const arquivo = req.file;
-
-        try {
-            console.log(arquivo)
-            const buscar = await ClientesModel.findById(id);
-
-            if (!buscar) {
-                return res.status(404).json({ status: 'error', msg: 'Cliente não encontrado.' });
-            }
-
-            if (buscar.fotoPerfil !== '') {
-                if (fs.existsSync(buscar.fotoPerfil)) {
-                    fs.unlinkSync(buscar.fotoPerfil);
-                }
-            }
-
-
-            const foto = await ClientesModel.findByIdAndUpdate(id, { fotoPerfil: arquivo.path });
-
-            if (foto) {
-                return res.status(200).json({ status: 'success', msg: 'Foto de perfil salva com sucesso.', dados: foto.fotoPerfil });
-            }
-
-            return res.status(400).json({ status: 'error', msg: 'Erro ao tentar salvar a foto de perfil.' });
-        } catch (error) {
-            return res.status(500).json({ status: 'error', msg: 'Erro interno do servidor.' });
-        }
-
-    }
-
-    async deletarFoto(req, res) {
-        try {
-
-            const id = req.params.id
-
-            const consulta = await ClientesModel.findById(id);
-
-            if (consulta) {
-
-                fs.unlinkSync(consulta.fotoPerfil);
-
-                const obj = {
-                    fotoPerfil: ''
-                }
-
-                const removerFoto = await ClientesModel.findByIdAndUpdate(id, obj);
-
-                if (removerFoto) return res.status(200).json({ status: `success`, msg: `Foto removida com sucesso.` });
-
-                return res.status(400).json({ status: `error`, msg: `Não foi possível remover a foto.` });
-
-
-            }
-
-            return res.status(400).json({ status: `error`, msg: `Não foi possível remover a foto.` });
-
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ status: `error`, msg: `Problemas no servidor.` });
-        }
-    }
 
 };
 
