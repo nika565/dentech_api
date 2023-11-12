@@ -24,6 +24,10 @@ const ClientesSchema = new Schema({
     senha: {
         type: String,
         required: true
+    },
+
+    fotoPerfil: {
+        type: String
     }
 
 });

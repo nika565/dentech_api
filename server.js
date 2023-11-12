@@ -14,6 +14,8 @@ conn();
 app.use(cors());
 app.use(express.json());
 app.use(roteador);
+app.use('/uploads', express.static('uploads'));
+
 
 const port = process.env.PORT || 3000;
 
