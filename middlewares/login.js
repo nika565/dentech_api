@@ -30,7 +30,7 @@ async function login(req, res) {
 
             if (consultar) {
 
-                if (consultar.senha === process.env.SENHAPADRAO) return res.status(200).json({status: `success`, msg: `Altere sua senha`})
+                if (consultar.senha === process.env.SENHAPADRAO) return res.status(200).json({status: `success`, msg: `Altere sua senha`, dados: consultar});
 
                 if (await ValidadorSenha.verificar(senha, consultar.senha)) {
 

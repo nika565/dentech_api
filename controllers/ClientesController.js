@@ -1,4 +1,3 @@
-const fs = require('fs');
 // Model para realizar operações no banco de dados
 const ClientesModel = require('../models/Clientes');
 
