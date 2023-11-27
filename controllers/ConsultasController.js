@@ -54,25 +54,15 @@ class ConsultasController {
             // Parâmetros opicionais para filtrar a consulta
             const { idConsulta, idCliente, idDentista, data, status } = req.query
 
-            if (idConsulta) {
-                query.idConsulta = idConsulta;
-            }
+            if (idConsulta) query.idConsulta = idConsulta;
 
-            if (idCliente) {
-                query.idCliente = idCliente;
-            }
+            if (idCliente) query.idCliente = idCliente;
+            
+            if (idDentista) query.idDentista = idDentista;
 
-            if (idDentista) {
-                query.idDentista = idDentista;
-            }
+            if (data) query.data = data;
 
-            if (data) {
-                query.data = data;
-            }
-
-            if (status) {
-                query.status = status;
-            }
+            if (status) query.status = status;
 
             const dados = await ConsultasModel.find(query);
 
@@ -110,50 +100,6 @@ class ConsultasController {
             if (agendamento) return res.status(200).json({ status: `success`, msg: `Consulta alterada com sucesso.` });
 
             return res.status(400).json({ status: `error`, msg: `Não foi possível agendar a consulta` });
-
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ status: 'error', msg: 'Problemas no servidor.' });
-        }
-    }
-
-    async relatorio(req, res) {
-        try {
-
-            // Verificando o cargo da pessoa que está criando o horario de agendamento
-            if (req.cargo !== 'adm' ) return res.status(403).json({status: `error`, msg: `Você não tem autorização para acessar esse recurso.`});
-
-            // Objeto que funciona para realizar a consulta de acordo com o parâmetro opicional
-            const query = {}
-
-            // Parâmetros opicionais para filtrar a consulta
-            const { idConsulta, idDentista, data, status, servico } = req.query
-
-            if (idConsulta) {
-                query.idConsulta = idConsulta;
-            }
-
-            if (idDentista) {
-                query.idDentista = idDentista;
-            }
-
-            if (data) {
-                query.data = data;
-            }
-
-            if (status) {
-                query.status = status;
-            }
-
-            if (servico) {
-                query.servico = servico;
-            }
-
-            const dados = await ConsultasModel.find(query);
-
-            if (dados.length > 0) return res.status(200).json({ status: `success`, msg: `OK.`, dados: dados });
-
-            return res.status(404).json({ status: `error`, msg: `Nenhum agendamento de consulta encontrado.` });
 
         } catch (error) {
             console.log(error);

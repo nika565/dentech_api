@@ -148,10 +148,10 @@ class FuncionariosController {
 
             const id = req.params.id;
 
-            const demitir = await FuncionariosModel.findByIdAndDelete(id);
+            const demitir = await FuncionariosModel.findByIdAndUpdate(id, {status: 'inativo'});
 
             if (demitir) {
-                return res.status(200).json({ msg: `Usuário demitido com sucesso.`, status: `success` });
+                return res.status(200).json({ msg: `Usuário inativado com sucesso.`, status: `success` });
             }
 
             return res.status(400).json({ msg: `Não foi possível realizar esta operação.`, status: `error` });
