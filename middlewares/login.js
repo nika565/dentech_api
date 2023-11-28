@@ -39,12 +39,13 @@ async function login(req, res) {
                         const segredo = process.env.SEGREDO;
 
                         const token = jwt.sign({
-                            id: consultar.id,
+                            id: consultar._id,
                             cargo: consultar.cargo
                         }, segredo);
 
                         // Dados a serem enviados para o cliente
                         const dados = {
+                            id: consultar._id,
                             nome: consultar.nome,
                             sobrenome: consultar.sobrenome,
                             email: consultar.email,
@@ -70,12 +71,13 @@ async function login(req, res) {
                         const segredo = process.env.SEGREDO;
 
                         const token = jwt.sign({
-                            id: consultar.id,
+                            id: consultar._id,
                             cargo: consultar.cargo
                         }, segredo);
 
                         // Dados a serem enviados para o cliente
                         const dados = {
+                            id: consultar._id,
                             nome: consultar.nome,
                             sobrenome: consultar.sobrenome,
                             email: consultar.email,
