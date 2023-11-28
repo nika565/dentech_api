@@ -30,7 +30,36 @@ async function login(req, res) {
 
             if (consultar) {
 
-                if (consultar.senha === process.env.SENHAPADRAO) return res.status(200).json({status: `success`, msg: `Altere sua senha`, dados: consultar});
+                if (consultar.senha === process.env.SENHAPADRAO) {
+
+                    // Gerar o token
+                    try {
+
+                        // Segredo da autenticação
+                        const segredo = process.env.SEGREDO;
+
+                        const token = jwt.sign({
+                            id: consultar.id,
+                            cargo: consultar.cargo
+                        }, segredo);
+
+                        // Dados a serem enviados para o cliente
+                        const dados = {
+                            nome: consultar.nome,
+                            sobrenome: consultar.sobrenome,
+                            email: consultar.email,
+                            cargo: consultar.cargo,
+                        }
+
+                        return res.status(200).json({status: `success`, msg: `Altere sua senha`, dados: dados, token: token});
+
+                    } catch (error) {
+                        console.log(error);
+                        return res.status(500).json({ status: `error`, msg: `Falha em gerar token de autenticação` });
+                    }
+
+                    
+                } 
 
                 if (await ValidadorSenha.verificar(senha, consultar.senha)) {
 
