@@ -173,7 +173,7 @@ class FuncionariosController {
             const reset = await FuncionariosModel.findByIdAndUpdate(id, { senha: process.env.SENHAPADRAO });
 
             if (reset) {
-                return res.status(200).json({ status: `error`, msg: `Senha redefinida com sucesso.` });
+                return res.status(200).json({ status: `success`, msg: `Senha redefinida com sucesso.` });
             }
 
             return res.status(400).json({ status: `error`, msg: `Não foi possível redefinir a senha.` });
