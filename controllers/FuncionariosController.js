@@ -85,7 +85,7 @@ class FuncionariosController {
 
             if (nome) {
 
-                const dados = await FuncionariosModel.find({ nome: { $regex: new RegExp(nome, 'i') } });
+                const dados = await FuncionariosModel.find({ nome: { $regex: new RegExp(`^${nome}`, 'i') } });
 
                 if (dados.length > 0) return res.status(200).json({ msg: `OK`, status: `success`, dados: dados });
             }
