@@ -62,7 +62,7 @@ class ConsultasController {
 
             if (data) query.data = data;
 
-            if (status) query.status = status;
+            if (status) query.data = { $regex: new RegExp(data, 'i') };
 
             const dados = await ConsultasModel.find(query);
 
