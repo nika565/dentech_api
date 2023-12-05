@@ -60,7 +60,7 @@ class ConsultasController {
             
             if (idDentista) query.idDentista = idDentista;
 
-            if (data) query.data = { $regex: new RegExp(data, 'i') };
+            if (data !== null && data !== undefined && data !== '') query.data = { $regex: new RegExp(data, 'i') };
 
             if (status) query.status = status;
 
