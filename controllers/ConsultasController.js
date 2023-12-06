@@ -1,5 +1,6 @@
 // Model para realizar operações no banco de dados
 const ConsultasModel = require('../models/Consultas');
+const ServicosModel = require('../models/Servicos');
 
 const buscandoServicos = require('../rules/buscandoServicos');
 
