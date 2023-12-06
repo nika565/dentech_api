@@ -1,6 +1,8 @@
 // Model para realizar operações no banco de dados
 const ConsultasModel = require('../models/Consultas');
 
+const buscandoServicos = require('../rules/buscandoServicos');
+
 const Validacoes = require('../rules/Validacoes');
 
 const validador = new Validacoes();
@@ -68,9 +70,24 @@ class ConsultasController {
 
             if (status) query.status = status;
 
-            const dados = await ConsultasModel.find(query);
+            let dados = await ConsultasModel.find(query);
 
-            if (dados.length > 0) return res.status(200).json({ status: `success`, msg: `OK.`, dados: dados });
+            // Verificação de data de consultas
+            const ano = new Date().getFullYear();
+            const mes = new Date().getMonth() + 1;
+
+            const dataAtual = `${ano}-${mes}`;
+
+            if (dataAtual === data) await validador.consultasPassadas(dados);
+
+
+            // Buscado os serviços
+            const dadosCompletos = await buscandoServicos(dados);
+
+            // console.log(dadosCompletos);
+
+
+            if (dadosCompletos.length > 0) return res.status(200).json({ status: `success`, msg: `OK.`, dados: dadosCompletos });
 
             return res.status(404).json({ status: `error`, msg: `Nenhum agendamento de consulta encontrado.` });
 

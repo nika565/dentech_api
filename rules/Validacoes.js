@@ -1,4 +1,7 @@
-// Validaçõese regras de negócio básicas
+// Model de consultas para realizar regra de negócio
+const ConsultasModel = require("../models/Consultas");
+
+// Validações e regras de negócio básicas
 
 class Validacoes {
 
@@ -48,6 +51,35 @@ class Validacoes {
         if (dataEnviada.getTime() > dataAtual.getTime()) return true;
 
         return false;
+
+    }
+
+    // Validar consultas que já passaram da data de marcação
+    async consultasPassadas(consultas) {
+
+        // Pegando a data atual
+        const dataAtual = new Date().getTime();
+
+        for (let consulta of consultas) {
+
+            try {
+
+                // Convertendo a data da consulta para milissegundos para realizar a comparação
+                const dataConsulta = new Date(`${consulta.data}T${consulta.horario}:00`).getTime()
+
+                if (dataAtual > dataConsulta && consulta.status === "disponivel") {
+                    await ConsultasModel.findByIdAndUpdate(consulta._id, {status: `finalizado.`});
+                    consulta.status = `finalizado`;
+                }
+
+                return true;
+                
+            } catch (error) {
+                console.log(error);
+                return res.status(500).json({status: `error`, msg: `Não foi possível processar as consultas...`});
+            }
+
+        }
 
     }
 
