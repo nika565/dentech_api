@@ -19,6 +19,7 @@ class ConsultasController {
                 req.body.data,
                 req.body.horario,
                 req.body.idDentista,
+                req.body.idServico
             ]
 
             // Validações
@@ -30,7 +31,8 @@ class ConsultasController {
                 data: req.body.data,
                 horario: req.body.horario,
                 idDentista: req.body.idDentista,
-                status: 'disponivel',
+                idServico: req.body.idServico,
+                status: 'disponivel'
             };
 
             const agendamento = await ConsultasModel.create(dadosAgendamento);
