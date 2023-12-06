@@ -105,7 +105,7 @@ class ConsultasController {
             // console.log(dadosCompletos);
 
 
-            if (dadosCompletos.length > 0) return res.status(200).json({ status: `success`, msg: `OK.`, dados: arr });
+            if (arr.length > 0) return res.status(200).json({ status: `success`, msg: `OK.`, dados: arr });
 
             return res.status(404).json({ status: `error`, msg: `Nenhum agendamento de consulta encontrado.` });
 
