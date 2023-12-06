@@ -70,7 +70,7 @@ class ConsultasController {
 
             if (status) query.status = status;
 
-            let dados = await ConsultasModel.find(query).populate('idServico');
+            let dados = await ConsultasModel.find(query);
 
             // Verificação de data de consultas
             const ano = new Date().getFullYear();
@@ -80,14 +80,31 @@ class ConsultasController {
 
             if (dataAtual === data) await validador.consultasPassadas(dados);
 
+            const arr = [];
+
+            for (let consulta of dados) {
+
+                const servico = await ServicosModel.findById(consulta.idServico);
+                
+                consulta.nomeServico = servico.nomeServico;
+                consulta.descricao = servico.descricao;
+                consulta.preco = servico.preco;
+    
+                console.log(consulta);
+    
+                
+                arr.push(consulta);
+                
+            };
+
 
             // Buscado os serviços
-            const dadosCompletos = await buscandoServicos(dados);
+            // const dadosCompletos = await buscandoServicos(dados);
 
             // console.log(dadosCompletos);
 
 
-            if (dadosCompletos.length > 0) return res.status(200).json({ status: `success`, msg: `OK.`, dados: dadosCompletos });
+            if (dadosCompletos.length > 0) return res.status(200).json({ status: `success`, msg: `OK.`, dados: arr });
 
             return res.status(404).json({ status: `error`, msg: `Nenhum agendamento de consulta encontrado.` });
 
