@@ -61,7 +61,7 @@ class ServicoController {
                 const dados = await ServicoModel.find();
 
                 if (dados.length > 0) {
-                    return res.status(200).json({ status: `error`, msg: `OK.`, dados: dados });
+                    return res.status(200).json({ status: `success`, msg: `OK.`, dados: dados });
                 }
 
                 return res.status(404).json({ status: `error`, msg: `Nenhum serviço encontrado.` });
