@@ -69,14 +69,13 @@ class Validacoes {
 
                 if (dataAtual > dataConsulta && consulta.status === "disponivel") {
                     await ConsultasModel.findByIdAndUpdate(consulta._id, {status: `finalizado.`});
-                    consulta.status = `finalizado`;
                 }
 
                 return true;
                 
             } catch (error) {
                 console.log(error);
-                return res.status(500).json({status: `error`, msg: `Não foi possível processar as consultas...`});
+                return false;
             }
 
         }
