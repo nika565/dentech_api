@@ -74,61 +74,6 @@ class ServicoController {
         }
     }
 
-    async editar(req, res) {
-        try {
-
-            // Verificando o cargo da pessoa que está criando o horario de agendamento
-            if (req.cargo !== 'adm') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
-            
-            const id = req.params.id;
-            
-            const servico = {};
-
-            if (req.body.nomeServico) {
-                servico.nomeServico = req.body.nomeServico
-            }
-
-            if (req.body.descricao) {
-                servico.descricao = req.body.descricao
-            }
-
-            if (req.body.preco) {
-                servico.preco = req.body.preco
-            }
-
-
-            const edicao = await ServicoModel.findByIdAndUpdate(id, servico);
-
-            if (edicao) return res.status(200).json({ status: `success`, msg: `Serviço alterado com sucesso.` });
-
-            return res.status(200).json({ status: `success`, msg: `Serviço alterado com sucesso.` });
-
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ status: 'error', msg: 'Problemas no servidor.' });
-        }
-    }
-
-    async apagar(req, res) {
-        try {
-
-            // Verificando o cargo da pessoa que está criando o horario de agendamento
-            if (req.cargo !== 'adm') return res.status(403).json({ status: `error`, msg: `Você não tem autorização para acessar esse recurso.` });
-
-            const id = req.params.id;
-
-            const deletar = await ServicoModel.findByIdAndDelete(id);
-
-            if (deletar) return res.status(200).json({ status: `success`, msg: `Serviço excluido com sucesso.` });
-
-            return res.status(404).json({ status: `error`, msg: `Não foi possível excluir o serviço` });
-
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ status: 'error', msg: 'Problemas no servidor.' });
-        }
-    }
-
 };
 
 module.exports = ServicoController;
