@@ -70,7 +70,7 @@ class ConsultasController {
 
             if (status) query.status = status;
 
-            let dados = await ConsultasModel.find(query);
+            let dados = await ConsultasModel.find(query).populate('idServico');
 
             // Verificação de data de consultas
             const ano = new Date().getFullYear();
