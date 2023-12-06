@@ -52,7 +52,7 @@ class ConsultasController {
             const query = {}
 
             // Parâmetros opicionais para filtrar a consulta
-            const { idConsulta, idCliente, idDentista, data, status } = req.query
+            const { idConsulta, idCliente, idDentista, data, status, idServico } = req.query
 
             if (idConsulta) query.idConsulta = idConsulta;
 
@@ -61,6 +61,8 @@ class ConsultasController {
             if (idDentista) query.idDentista = idDentista;
 
             if (data !== null && data !== undefined && data !== '') query.data = { $regex: new RegExp(data, 'i') };
+
+            if (idServico !== null && idServico !== undefined && idServico !== '') query.idServico = idServico;
 
             if (status) query.status = status;
 
