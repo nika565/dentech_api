@@ -59,7 +59,7 @@ class ConsultasController {
             // Parâmetros opicionais para filtrar a consulta
             const { idConsulta, idCliente, idDentista, data, status, idServico } = req.query
 
-            if (idConsulta) query.idConsulta = idConsulta;
+            if (idConsulta) query._id = idConsulta;
 
             if (idCliente) query.idCliente = idCliente;
             
